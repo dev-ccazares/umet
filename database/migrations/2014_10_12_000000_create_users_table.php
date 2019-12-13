@@ -23,7 +23,8 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
     }
-
+    //User admin@admin.com
+    //Pass $2y$10$HYosdWmZrDcTwn6a/hhLA.c9SowpQK1gkgbnO8Qwv9tSpRwbt8oAS -> Admin2710
     /**
      * Reverse the migrations.
      *

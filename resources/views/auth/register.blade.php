@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
+                @if (Auth::user()->email == 'admin@admin.com')
                 <div class="card-header">{{ __('Register') }}</div>
-
                 <div class="card-body">
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
@@ -70,6 +71,10 @@
                         </div>
                     </form>
                 </div>
+                @else
+                <div class="card-header">Atención !</div>
+                <div class="card-body">Usuario sin permisos</div>
+                @endif
             </div>
         </div>
     </div>
