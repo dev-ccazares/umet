@@ -15,7 +15,8 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Periodo:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="periodo" placeholder="Periodo" value="{{ isset($tmp) ? $tmp->name : ''}}" required disabled>
+                    <input id="{{ isset($tmp) ? $tmp->id_period : 'id_period'}}" name="{{ isset($tmp) ? $tmp->id_period : 'id_period'}}" hidden value="{{ isset($tmp) ? $tmp->id_period : ''}}" required>
+                    <input type="text" class="form-control" id="{{ isset($tmp) ? $tmp->period->detail : 'periodText'}}" value="{{ isset($tmp) ? $tmp->period->detail : ''}}" disabled required>
                 </div>
             </div>
         </div>
@@ -23,7 +24,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Código IES:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="codigo_ies" placeholder="Código IES" value="{{ isset($tmp) ? $tmp->name : ''}}" required>
+                    <input type="text" class="form-control" name="codigo_ies" placeholder="Código IES" value="{{ isset($tmp) ? $tmp->codigo_ies : ''}}" required>
                 </div>
             </div>
         </div>
@@ -31,7 +32,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Código Carrera:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="codigo_carrera" placeholder="Código Carrera" value="{{ isset($tmp) ? $tmp->name : ''}}" required>
+                    <input type="text" class="form-control" name="codigo_carrera" placeholder="Código Carrera" value="{{ isset($tmp) ? $tmp->codigo_carrera : ''}}" required>
                 </div>
             </div>
         </div>
@@ -39,7 +40,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Identificación Estudiante:</label>
                 <div class="col-sm-7">
-                    <input type="text" oninput="numberOnly(this.id);"  maxlength="10" class="form-control" name="ci_estudiante" id="ci_estudiante" placeholder="Identificación Estudiante" value="{{ isset($tmp) ? $tmp->name : ''}}" required>
+                    <input type="text" oninput="numberOnly(this.id);"  maxlength="10" class="form-control" name="ci_estudiante" id="ci_estudiante" placeholder="Identificación Estudiante" value="{{ isset($tmp) ? $tmp->ci_estudiante : ''}}" required>
                 </div>
             </div>
         </div>
@@ -47,7 +48,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Nombre Estudiante:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="nombre_estudiante" placeholder="Nombre Estudiante" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="text" class="form-control" name="nombre_estudiante" placeholder="Nombre Estudiante" value="{{ isset($tmp) ? $tmp->nombre_estudiante : ''}}" required>
                 </div>
             </div>
         </div>
@@ -55,7 +56,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Nombre Institución:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="nombre_institucion" placeholder="Nombre Institución" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="text" class="form-control" name="nombre_institucion" placeholder="Nombre Institución" value="{{ isset($tmp) ? $tmp->nombre_institucion : ''}}" required>
                 </div>
             </div>
         </div>
@@ -63,7 +64,10 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Tipo Institución:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="tipo_institucion" placeholder="Tipo Institución" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <select name="tipo_institucion" class="form-control">
+                        <option value="PUBLICA" {{ isset($tmp) ? ($tmp->tipo_institucion == "PUBLICA" ? 'selected' : ''): ''}}>Publica</option>
+                        <option value="PRIVADA" {{ isset($tmp) ? ($tmp->tipo_institucion == "PRIVADA" ? 'selected' : '') : ''}}>Privada</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -71,7 +75,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Fecha Inicio:</label>
                 <div class="col-sm-7">
-                    <input type="date" class="form-control" name="fecha_inicio" placeholder="Fecha Inicio" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="date" class="form-control" name="fecha_inicio" placeholder="Fecha Inicio" value="{{ isset($tmp) ? $tmp->fecha_inicio : ''}}" required>
                 </div>
             </div>
         </div>
@@ -79,7 +83,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Fecha Fin:</label>
                 <div class="col-sm-7">
-                    <input type="date" class="form-control" name="fecha_fin" placeholder="Fecha Fin" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="date" class="form-control" name="fecha_fin" placeholder="Fecha Fin" value="{{ isset($tmp) ? $tmp->fecha_fin : ''}}" required>
                 </div>
             </div>
         </div>
@@ -87,7 +91,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Número Horas:</label>
                 <div class="col-sm-7">
-                    <input type="number" min="1" max='9999' class="form-control" name="numero_horas" placeholder="Número Horas" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="number" min="1" max='9999' class="form-control" name="numero_horas" placeholder="Número Horas" value="{{ isset($tmp) ? $tmp->numero_horas : ''}}" required>
                 </div>
             </div>
         </div>
@@ -95,7 +99,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Campo Específico:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="campo_especifico" placeholder="Campo Específico" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="text" class="form-control" name="campo_especifico" placeholder="Campo Específico" value="{{ isset($tmp) ? $tmp->campo_especifico : ''}}" required>
                 </div>
             </div>
         </div>
@@ -103,7 +107,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Docente Tutor:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->alias : ''}}" required>
+                    <input type="text" class="form-control" name="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" required>
                 </div>
             </div>
         </div>
@@ -112,7 +116,7 @@
                 <label class="control-label col-sm-3 my-auto text-right" >&nbsp;Convalidación horas trabajo:</label>     
                 <div class="col-sm-7"> 
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="convalidacion" name="convalidacion"{{ isset($tmp) ? ($tmp->status ? 'checked':'') : ''}} value="1">
+                        <input type="checkbox" class="custom-control-input" id="convalidacion" name="convalidacion"{{ isset($tmp) ? ($tmp->convalidacion ? 'checked':'') : ''}} value="1">
                         <label class="custom-control-label" for="convalidacion">&nbsp;</label>
                     </div>
                 </div>
@@ -126,6 +130,8 @@
 </div>
 <script>
     $(document).ready(function() {
+        $("#id_period").val($('#period option:selected').val());
+        $("#periodText").val($('#period option:selected').text());
         $('#save').click(function() {
             if ($('#load').is(':visible')) {
                 $('#load').toggle();

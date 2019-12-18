@@ -26,7 +26,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-principal shadow-sm" >
             <div class="container" >
                 <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ asset('storage/logotipo.png') }}" width="40%" height="40%" alt="{{ asset('storage/logotipo.png') }}" >
+                    <img src="{{ asset('storage/logotipo.png') }}" width="170px" height="25" alt="{{ asset('storage/logotipo.png') }}" >
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -35,8 +35,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
-                    </ul>
+                        <li class="nav-item">
+                          <a class="nav-link" href="home">Registros <span class="sr-only">(current)</span></a>
+                        </li>
+                      </ul>
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -84,8 +86,9 @@
     </div>
     @jquery
     @toastr_js
-    @toastr_render
+    <script src="{{ asset('js/sweetalert.min.js') }}" ></script>
     <script src="{{ asset('js/backend/custom.js') }}" ></script>
+    @toastr_render
     @yield('js')
 </body>
 </html>

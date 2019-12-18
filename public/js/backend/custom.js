@@ -1,5 +1,4 @@
 $(document).ready(function() {
-  $('#delete').confirmation(options)
   $(".btnModal").click(function(e) {
     e.preventDefault();
     url = $(this).data("url");

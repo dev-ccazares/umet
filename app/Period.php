@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Period extends Model {
 
-    protected $table = 'registry';
+    protected $table = 'period';
     protected $fillable = [
         'detail'
     ];

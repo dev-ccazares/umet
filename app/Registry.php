@@ -9,6 +9,7 @@ class Registry extends Model {
     protected $table = 'registry';
     protected $fillable = [
         'codigo_ies', 
+        'id_period', 
         'codigo_carrera', 
         'ci_estudiante',
         'nombre_estudiante',
@@ -21,4 +22,8 @@ class Registry extends Model {
         'docente_tutor',
         'convalidacion'
     ];
+
+    public function period(){
+        return $this->hasOne('App\Period','id','id_period');
+    }
 }

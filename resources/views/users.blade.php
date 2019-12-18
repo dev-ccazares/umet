@@ -45,8 +45,10 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="card-footer text-muted">
-                        2 days ago
+                    <div class="card-footer">
+                        <nav class="float-right" aria-label="Page navigation example">
+                            {!! str_replace('/?', '?', $users->appends(app('request')->query())->render()) !!}
+                        </nav>
                     </div>
                 </div>
             </div>

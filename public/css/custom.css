@@ -9,4 +9,9 @@
 .bg-fin {
     background: #AFF7C0 !important;
 }
+.btn-principal {
+    color: #fff;
+    background-color: #009ba9 !important;
+    border-color: #009ba9 !important;
+}
 
