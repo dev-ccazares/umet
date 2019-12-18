@@ -24,14 +24,6 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
     /**
      * Create a new controller instance.
      *
@@ -40,18 +32,13 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-       /*  dd(session('user'));
-        if(Auth::user() != 'admin@admin.com'){
-            return redirect('/');
-        } */
     }
 
     public function register(Request $request) {
         $this->validator($request->all())->validate();
-
         event(new Registered($user = $this->create($request->all())));
         toastr()->success('Usuario Agregado!');
-        return redirect($this->redirectPath());
+        return redirect()->route('users');
     }
     /**
      * Get a validator for an incoming registration request.

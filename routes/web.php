@@ -19,3 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users', 'Auth\UsersController@index')->name('users');
+Route::get('/registry/new', 'HomeController@create')->name('newRegistry');
+Route::post('/registry/save', 'HomeController@save')->name('saveRegistry');

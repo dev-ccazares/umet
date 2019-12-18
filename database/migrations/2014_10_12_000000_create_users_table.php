@@ -26,6 +26,12 @@ class CreateUsersTable extends Migration
     //User admin@admin.com
     //Pass $2y$10$HYosdWmZrDcTwn6a/hhLA.c9SowpQK1gkgbnO8Qwv9tSpRwbt8oAS -> Admin2710
     /**
+     * INSERT INTO `users` 
+     * (`name`, `email`,  `password`, `created_at`, `updated_at`) 
+     *  VALUES 
+     * ('admin', 'admin@admin.com', '$2y$10$HYosdWmZrDcTwn6a/hhLA.c9SowpQK1gkgbnO8Qwv9tSpRwbt8oAS', '2019-12-16 00:00:00', '2019-12-16 00:00:00');
+     */
+    /**
      * Reverse the migrations.
      *
      * @return void

@@ -3,7 +3,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -15,9 +14,10 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+    <link rel="icon" href="{{ asset('storage/fav.ico') }}" type="image/x-icon"/>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/mdi/css/materialdesignicons.css') }}" rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
     @toastr_css
 </head>
@@ -74,10 +74,18 @@
         <main class="py-4">
             @yield('content')
         </main>
+        <div class="modal fade" id="modalDefault" tabindex="-1" role="dialog" aria-labelledby="modalDefaultLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div id="content-data-msj" class="modal-content">
+                    
+                </div>
+            </div>
+        </div> 
     </div>
     @jquery
     @toastr_js
     @toastr_render
+    <script src="{{ asset('js/backend/custom.js') }}" ></script>
     @yield('js')
 </body>
 </html>
