@@ -9,6 +9,7 @@
                         <div class="col-md-6 text-left align-middle">Registros</div>
                         <div class="col-md-6 text-right">
                             <button type="button" class="btn btn-dark text-white btnModal btn-sm desactivar" data-url="{{route('newRegistry')}}" ><i class="mdi mdi-plus-circle"></i>&nbsp;Agregar </button>
+                            <button  class="btn btn-success text-white btn-sm parametros" data-url="{{route('exportRegistry')}}" ><i class="mdi mdi-file-excel"></i>&nbsp;Excel </button>
                         </div>
                     </div>
                      

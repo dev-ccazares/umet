@@ -6,6 +6,8 @@ use App\Helpers\Format;
 use Illuminate\Http\Request;
 use App\Registry;
 use App\Period;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\RegistryExport;
 class HomeController extends Controller
 {
     /**
@@ -26,14 +28,21 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request) {
-        $query = Registry::select('*');
         $data['periodSelected'] = $request->has('period') ? $request->get('period') : null;
+        $query = Registry::select('*');
+        $data['registry'] = $this->filter($query,$request)->paginate(15);
+        $data['search'] = $request->has('search') ? $request->get('search') : null;
+        $data['search'] = $request->has('search') ? $request->get('search') : null;
+        $data['period'] = Period::all();
+        return view('home',$data);
+    }
+
+    private function filter($query, Request $request){
         if($request->has('period') && $request->get('period') != '' ){
-            $query = $query->where('id_period',$data['periodSelected']);
+            $query = $query->where('id_period',$request->get('period'));
         }
         if($request->has('search') && $request->get('search') != ''){
-            $data['search'] = $request->has('search') ? $request->get('search') : null;
-            $search = $data['search'];
+            $search = $request->get('search');
             $query = $query->where(function ($q) use ( $search ) {
                 $q->where('id_period','like','%'.$search.'%')
                 ->orWhere('codigo_ies','like','%'.$search.'%')
@@ -46,11 +55,11 @@ class HomeController extends Controller
                 ->orWhere('docente_tutor','like','%'.$search.'%');
             });
         }
+        return $query;
+    }
 
-        $data['registry'] = $query->paginate(15);
-        $data['search'] = $request->has('search') ? $request->get('search') : null;
-        $data['period'] = Period::all();
-        return view('home',$data);
+    public function export(Request $request){
+        return Excel::download( new RegistryExport($request), 'reporte.xlsx');
     }
 
     public function create (){
@@ -62,11 +71,21 @@ class HomeController extends Controller
     public function save (Request $request) {
         $validator = \Validator::make($request->all(), [
             'codigo_ies' => 'required',
+            'nombre_estudiante' => 'required',
+            'nombre_institucion' => 'required',
             'ci_estudiante' => 'required|digits:10',
+            'numero_horas' => 'required|integer|min:1|not_in:0',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'after_or_equal:fecha_inicio',
         ],[
             'codigo_ies.required' => 'El campo es requerido',
             'ci_estudiante.required' => 'El campo es requerido',
-            'ci_estudiante.digits' => 'El campo no debe tener 10 dígitos',
+            'numero_horas.required' => 'El campo es requerido',
+            'fecha_inicio.required' => 'El campo es requerido',
+            'nombre_estudiante.required' => 'El campo es requerido',
+            'nombre_institucion.required' => 'El campo es requerido',
+            'numero_horas.min' => 'Ingrese solo números mayor a cero',
+            'numero_horas.not_in' => 'Ingrese solo números mayor a cero',
         ]);
 
         if ($validator->fails()) {
@@ -90,15 +109,31 @@ class HomeController extends Controller
     public function update ($id,Request $request) {
         $validator = \Validator::make($request->all(), [
             'codigo_ies' => 'required',
+            'nombre_estudiante' => 'required',
+            'nombre_institucion' => 'required',
             'ci_estudiante' => 'required|digits:10',
+            'numero_horas' => 'required|integer|min:1|not_in:0',
+            'fecha_inicio' => 'required',
+            'fecha_fin' => 'after_or_equal:fecha_inicio',
         ],[
             'codigo_ies.required' => 'El campo es requerido',
             'ci_estudiante.required' => 'El campo es requerido',
-            'ci_estudiante.digits' => 'El campo no debe tener 10 dígitos',
+            'numero_horas.required' => 'El campo es requerido',
+            'fecha_inicio.required' => 'El campo es requerido',
+            'nombre_estudiante.required' => 'El campo es requerido',
+            'nombre_institucion.required' => 'El campo es requerido',
+            'numero_horas.min' => 'Ingrese solo números mayor a cero',
+            'numero_horas.not_in' => 'Ingrese solo números mayor a cero',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->messages(), 422);
+        }
+        if(!$request->has('convalidacion')){
+            $request->request->add(['convalidacion' => 0]); 
+        }
+        if(!$request->has('fecha_fin')){
+            $request->request->add(['fecha_fin' => null]); 
         }
         $update = Registry::find($id)->update($request->all());
         if(!$update){

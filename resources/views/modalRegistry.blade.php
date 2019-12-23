@@ -24,13 +24,13 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Código IES:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="codigo_ies" placeholder="Código IES" value="{{ isset($tmp) ? $tmp->codigo_ies : ''}}" required>
+                    <input type="text" class="form-control"  oninput="numberOnly(this.id);"  maxlength="6"  name="codigo_ies" placeholder="Código IES" value="{{ isset($tmp) ? $tmp->codigo_ies : ''}}" required>
                 </div>
             </div>
         </div>
         <div class="col-12" >
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Código Carrera:</label>
+                <label class="control-label col-sm-3 my-auto text-right" >Código Carrera:</label>
                 <div class="col-sm-7">
                     <input type="text" class="form-control" name="codigo_carrera" placeholder="Código Carrera" value="{{ isset($tmp) ? $tmp->codigo_carrera : ''}}" required>
                 </div>
@@ -81,9 +81,9 @@
         </div>
         <div class="col-12">
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Fecha Fin:</label>
+                <label class="control-label col-sm-3 my-auto text-right" >Fecha Fin:</label>
                 <div class="col-sm-7">
-                    <input type="date" class="form-control" name="fecha_fin" placeholder="Fecha Fin" value="{{ isset($tmp) ? $tmp->fecha_fin : ''}}" required>
+                    <input type="date" class="form-control" name="fecha_fin" placeholder="Fecha Fin" value="{{ isset($tmp) ? $tmp->fecha_fin : ''}}" >
                 </div>
             </div>
         </div>
@@ -97,17 +97,17 @@
         </div>
         <div class="col-12">
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Campo Específico:</label>
+                <label class="control-label col-sm-3 my-auto text-right" >Campo Específico:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="campo_especifico" placeholder="Campo Específico" value="{{ isset($tmp) ? $tmp->campo_especifico : ''}}" required>
+                    <input type="text" class="form-control" name="campo_especifico" placeholder="Campo Específico" value="{{ isset($tmp) ? $tmp->campo_especifico : ''}}" >
                 </div>
             </div>
         </div>
         <div class="col-12">
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Docente Tutor:</label>
+                <label class="control-label col-sm-3 my-auto text-right" >Docente Tutor:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" required>
+                    <input type="text" class="form-control" name="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" >
                 </div>
             </div>
         </div>
@@ -139,10 +139,15 @@
             $('.loader').toggle();
             $('.load').attr('disabled', true);
             url = $(this).data("url");
+            form = $("#formDefault").serializeArray();
+            if(form[9].value == ''){
+                form.splice(9,1);
+            }
+            console.log(form);
             $.ajax({
                 url: url,
                 type: 'POST',
-                data: $('#formDefault').serialize(),
+                data: form,
                 dataType: 'json',
                 success: function(data) {
                     location.reload();

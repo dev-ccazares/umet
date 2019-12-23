@@ -41,6 +41,10 @@ $(document).ready(function() {
     $(location).attr('href', $(this).data("url"));
   });
 
+  $('.parametros').click(function() {
+    $(location).attr('href', $(this).data("url")+'?'+window.location.search.substring(1));
+  });
+
   toastr.options.onShown = function() {  }
   toastr.options.onHidden = function() {  }
   toastr.options.onclick = function() {  }

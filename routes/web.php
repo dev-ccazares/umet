@@ -27,3 +27,4 @@ Route::get('/registry/delete/{id}', 'HomeController@delete')->name('deleteRegist
 Route::post('/period/save', 'HomeController@savePeriod')->name('savePeriod');
 Route::post('/period/edit', 'HomeController@editPeriod')->name('editPeriod');
 Route::get('/period/delete', 'HomeController@deletePeriod')->name('deletePeriod');
+Route::get('/period/export', 'HomeController@export')->name('exportRegistry');

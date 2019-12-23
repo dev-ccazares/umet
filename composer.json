@@ -13,6 +13,7 @@
         "laravel/framework": "^6.2",
         "laravel/tinker": "^2.0",
         "laraveles/spanish": "^1.4",
+        "maatwebsite/excel": "^3.1",
         "snapappointments/bootstrap-select": "^1.13",
         "yoeunes/toastr": "^1.2"
     },
