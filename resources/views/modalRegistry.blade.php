@@ -20,6 +20,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-12">
+            <div class="form-group row">  
+                <label class="control-label col-sm-3 my-auto text-right" >&nbsp;Convalidación horas trabajo:</label>     
+                <div class="col-sm-7"> 
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="convalidacion" name="convalidacion"{{ isset($tmp) ? ($tmp->convalidacion ? 'checked':'') : ''}} value="1">
+                        <label class="custom-control-label" for="convalidacion">&nbsp;</label>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-12" >
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Código IES:</label>
@@ -38,7 +49,7 @@
         </div>
         <div class="col-12" >
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Identificación Estudiante:</label>
+                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Cédula Estudiante:</label>
                 <div class="col-sm-7">
                     <input type="text" oninput="numberOnly(this.id);"  maxlength="10" class="form-control" name="ci_estudiante" id="ci_estudiante" placeholder="Identificación Estudiante" value="{{ isset($tmp) ? $tmp->ci_estudiante : ''}}" required>
                 </div>
@@ -67,6 +78,7 @@
                     <select name="tipo_institucion" class="form-control">
                         <option value="PUBLICA" {{ isset($tmp) ? ($tmp->tipo_institucion == "PUBLICA" ? 'selected' : ''): ''}}>Publica</option>
                         <option value="PRIVADA" {{ isset($tmp) ? ($tmp->tipo_institucion == "PRIVADA" ? 'selected' : '') : ''}}>Privada</option>
+                        <option value="MUNICIPAL" {{ isset($tmp) ? ($tmp->tipo_institucion == "MUNICIPAL" ? 'selected' : '') : ''}}>Municipal</option>
                     </select>
                 </div>
             </div>
@@ -87,17 +99,17 @@
                 </div>
             </div>
         </div>
-        <div class="col-12">
+        <div class="col-12" id="ocultar">
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Número Horas:</label>
+                <label class="control-label col-sm-3 my-auto text-right" >Número Horas:</label>
                 <div class="col-sm-7">
-                    <input type="number" min="1" max='9999' class="form-control" name="numero_horas" placeholder="Número Horas" value="{{ isset($tmp) ? $tmp->numero_horas : ''}}" required>
+                    <input type="number" min="0" max='99' class="form-control" id="numero_horas" name="numero_horas" placeholder="Número Horas" value="{{ isset($tmp) ? $tmp->numero_horas : ''}}" required>
                 </div>
             </div>
         </div>
         <div class="col-12">
             <div class="form-group row">
-                <label class="control-label col-sm-3 my-auto text-right" >Campo Específico:</label>
+                <label class="control-label col-sm-3 my-auto text-right" >Área Laboral:</label>
                 <div class="col-sm-7">
                     <input type="text" class="form-control" name="campo_especifico" placeholder="Campo Específico" value="{{ isset($tmp) ? $tmp->campo_especifico : ''}}" >
                 </div>
@@ -107,17 +119,17 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" >Docente Tutor:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" >
+                    <input type="text" class="form-control" name="docente_tutor" id="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" >
                 </div>
             </div>
         </div>
         <div class="col-12">
             <div class="form-group row">  
-                <label class="control-label col-sm-3 my-auto text-right" >&nbsp;Convalidación horas trabajo:</label>     
+                <label class="control-label col-sm-3 my-auto text-right" >&nbsp;Carta de presentación:</label>     
                 <div class="col-sm-7"> 
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" class="custom-control-input" id="convalidacion" name="convalidacion"{{ isset($tmp) ? ($tmp->convalidacion ? 'checked':'') : ''}} value="1">
-                        <label class="custom-control-label" for="convalidacion">&nbsp;</label>
+                        <input type="checkbox" class="custom-control-input" id="papeleo" name="papeleo"{{ isset($tmp) ? ($tmp->papeleo ? 'checked':'') : ''}} value="1">
+                        <label class="custom-control-label" for="papeleo">&nbsp;</label>
                     </div>
                 </div>
             </div>
@@ -130,8 +142,12 @@
 </div>
 <script>
     $(document).ready(function() {
+        ocultar();
         $("#id_period").val($('#period option:selected').val());
         $("#periodText").val($('#period option:selected').text());
+        $('#convalidacion').click(function() {
+            ocultar();
+        });
         $('#save').click(function() {
             if ($('#load').is(':visible')) {
                 $('#load').toggle();
@@ -143,7 +159,9 @@
             if(form[9].value == ''){
                 form.splice(9,1);
             }
-            console.log(form);
+            if(form[10].value == ''){
+                form.splice(10,1);
+            }
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -182,5 +200,15 @@
         var element = document.getElementById(id);
         var regex = /[^0-9]/gi;
         element.value = element.value.replace(regex, "");
+    }
+    function ocultar(){
+        if($('#convalidacion').is(':checked')  ) {
+            $('#ocultar').hide('slow');
+            $('#numero_horas').val('0');
+            $('#docente_tutor').val('Ing. William Chumi');
+        }else{
+            $('#ocultar').show('slow');
+            $('#docente_tutor').val('');
+        }
     }
 </script>

@@ -7,12 +7,7 @@
                 <div class="card-header">
                     <div class="row ">
                         <div class="col-md-6 text-left align-middle">Registros</div>
-                        <div class="col-md-6 text-right">
-                            <button type="button" class="btn btn-dark text-white btnModal btn-sm desactivar" data-url="{{route('newRegistry')}}" ><i class="mdi mdi-plus-circle"></i>&nbsp;Agregar </button>
-                            <button  class="btn btn-success text-white btn-sm parametros" data-url="{{route('exportRegistry')}}" ><i class="mdi mdi-file-excel"></i>&nbsp;Excel </button>
-                        </div>
                     </div>
-                     
                 </div>
                 <div class="card-body">
                     <form action="" method="GET">
@@ -26,20 +21,29 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-3 mt-auto text-center">
+                            <div class="col-3  text-center">
                                 <label><h5>Acciones</h5></label> 
-                                </br>
-                                <button id="nuevo" data-url="{{route('savePeriod')}}" type="button" class="btn btn-principal text-white btn-sm" data-toggle="modal" data-target="#modalPeriodo" ><i class="mdi mdi-plus-circle"></i>&nbsp;Nuevo </button>
-                                <button id="editar" data-url="{{route('editPeriod')}}" type="button" class="btn btn-principal text-white btn-sm desactivar" data-toggle="modal" data-target="#modalPeriodo"><i class="mdi mdi-pencil"></i>&nbsp;Editar </button>
-                                <button  id="eliminar" type="button" class="btn btn-danger btn-sm desactivar" data-url="{{route('deletePeriod')}}" ><i class="mdi mdi-delete"></i>&nbsp;Eliminar </button>
+                                <div class="mt-1">
+                                    <button id="nuevo" data-url="{{route('savePeriod')}}" type="button" class="btn btn-principal text-white btn-sm" data-toggle="modal" data-target="#modalPeriodo" ><i class="mdi mdi-plus-circle"></i>&nbsp;Nuevo </button>
+                                    <button id="editar" data-url="{{route('editPeriod')}}" type="button" class="btn btn-principal text-white btn-sm desactivar" data-toggle="modal" data-target="#modalPeriodo"><i class="mdi mdi-pencil"></i>&nbsp;Editar </button>
+                                    <button  id="eliminar" type="button" class="btn btn-danger btn-sm desactivar" data-url="{{route('deletePeriod')}}" ><i class="mdi mdi-delete"></i>&nbsp;Eliminar </button>
+                                </div>    
                             </div>
-                            <div class="col-md-5 mt-auto ">
+                            <div class="col-md-5 text-center">
+                                <label><h5>Filtros</h5></label> 
                                 <div class="row">
-                                    <div class="col-9 mt-auto">
+                                    <div class="col-4 px-0">
+                                        <select id="final" name="final" class="form-control">
+                                            <option value="" > Escoja una opción</option>
+                                            <option value="N" >Finalizado - Normal</option>
+                                            <option value="T" >Finalizado - Trabajo</option>
+                                            <option value="S" >Sin Finalizar</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-5 pr-0">
                                         <input type="text" class="form-control" name="search" id="search" placeholder="Buscar" value="{{$search}}">
                                     </div>
-                                    <div class="col-3 mt-auto text-right">
-                                    </br>
+                                    <div class="col-3 m-auto text-right">
                                         <button type="submit" class="btn btn-principal text-white btn-sm" ><i class="mdi mdi-magnify"></i>&nbsp;Buscar </button>
                                     </div>
                                 </div>
@@ -47,34 +51,40 @@
                         </div>
                     </form>
                     <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-dark text-white btnModal btn-sm desactivar" data-url="{{route('newRegistry')}}" ><i class="mdi mdi-plus-circle"></i>&nbsp;Agregar </button>
+                            <button  class="btn btn-success text-white btn-sm parametros" data-url="{{route('exportRegistry')}}" ><i class="mdi mdi-file-excel"></i>&nbsp;Excel </button>
+                        </div>
                         <div class="col-12 pt-2">
-                            <table class="table table-responsive table-sm">
+                            <table class="table table-sm">
                                 <thead class="bg-principal text-white">
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Periodo</th>
-                                        <th scope="col">Código IES</th>
-                                        <th scope="col">Código Carrera</th>
-                                        <th scope="col">Identificación Estudiante</th>
-                                        <th scope="col">Nombre Estudiante</th>
-                                        <th scope="col">Nombre Institución</th>
-                                        <th scope="col">Tipo Institución</th>
-                                        <th scope="col">Fecha Inicio</th>
-                                        <th scope="col">Fecha Fin</th>
-                                        <th scope="col">Num Horas</th>
-                                        <th scope="col">Campo Específico</th>
-                                        <th scope="col">Docente Tutor</th>
-                                        <th scope="col">Fecha de Modificación</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'id', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">#</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'id_period', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Periodo</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'codigo_ies', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Código IES</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'codigo_carrera', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Código Carrera</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'ci_estudiante', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Cédula Estudiante</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'nombre_estudiante', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Nombre Estudiante</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'nombre_institucion', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Nombre Institución</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'tipo_institucion', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Tipo Institución</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'fecha_inicio', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Fecha Inicio</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'fecha_fin', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Fecha Fin</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'numero_horas', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Num Horas</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'campo_especifico', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Campo Específico</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'docente_tutor', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Docente Tutor</th>
+                                        <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'updated_at', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Fecha de Modificación</th>
                                         <th scope="col" width="80px">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if($registry->count())
                                         @foreach ($registry as $item)
-                                        @if ($item->convalidacion && $item->fecha_fin == '')
-                                            <tr class="bg-convalidacion" >   
-                                        @elseif($item->fecha_fin != '' || isset($item->fecha_fin))
+                                        @if($item->fecha_fin != '' || isset($item->fecha_fin))
                                             <tr class="bg-fin" > 
+                                        @elseif ($item->convalidacion && $item->fecha_fin == '')
+                                            <tr class="bg-convalidacion" >    
+                                        @elseif ($item->papeleo && $item->fecha_fin == '')
+                                            <tr class="bg-papeleo" > 
                                         @else
                                             <tr> 
                                         @endif

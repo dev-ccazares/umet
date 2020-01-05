@@ -28,12 +28,17 @@ class CreateRegistryTable extends Migration
             $table->string('campo_especifico')->nullable();
             $table->string('docente_tutor')->nullable();
             $table->boolean('convalidacion')->default(0);
+            $table->boolean('papeleo')->default(0);
             $table->timestamps();
 
             $table->foreign('id_period')->references('id')->on('period')->onDelete('cascade');
 
         });
     }
+
+    /**
+     * ALTER TABLE `data_umet`.`registry` ADD COLUMN `papeleo` TINYINT(1) NOT NULL DEFAULT 0 AFTER `convalidacion`;
+    */
 
     /**
      * Reverse the migrations.

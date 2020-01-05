@@ -9,9 +9,17 @@
 .bg-fin {
     background: #AFF7C0 !important;
 }
+
+.bg-papeleo {
+    background: #FFC9C9 !important;
+}
+
 .btn-principal {
     color: #fff;
     background-color: #009ba9 !important;
     border-color: #009ba9 !important;
 }
+.cabeceraTabla {
+    cursor: pointer;
+  }
 

@@ -20,7 +20,8 @@ class Registry extends Model {
         'campo_especifico',
         'numero_horas',
         'docente_tutor',
-        'convalidacion'
+        'convalidacion',
+        'papeleo'
     ];
 
     public function period(){

@@ -41,6 +41,10 @@ $(document).ready(function() {
     $(location).attr('href', $(this).data("url"));
   });
 
+  $('.cabeceraTabla').click(function() {
+    $(location).attr('href', $(this).data("id"));
+  });
+
   $('.parametros').click(function() {
     $(location).attr('href', $(this).data("url")+'?'+window.location.search.substring(1));
   });

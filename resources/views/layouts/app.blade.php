@@ -24,25 +24,20 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-dark bg-principal shadow-sm" >
-            <div class="container" >
+            <div class="container col-12" >
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('storage/logotipo.png') }}" width="170px" height="25" alt="{{ asset('storage/logotipo.png') }}" >
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
                           <a class="nav-link" href="home">Registros <span class="sr-only">(current)</span></a>
                         </li>
                       </ul>
-
-                    <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
-                        <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>

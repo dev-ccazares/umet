@@ -8,32 +8,35 @@ use App\Registry;
 use App\Period;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\RegistryExport;
-class HomeController extends Controller
-{
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(Format $format)
-    { 
+class HomeController extends Controller {
+ 
+    public function __construct(Format $format) { 
         $this->format =  $format;
-        $this->middleware('auth');
-        
+        $this->middleware('auth');  
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index(Request $request) {
         $data['periodSelected'] = $request->has('period') ? $request->get('period') : null;
         $query = Registry::select('*');
-        $data['registry'] = $this->filter($query,$request)->paginate(15);
+        if($request->has('order')){
+            if($request->order == 'desc'){
+                $data['order_list'] = 'asc'; 
+            }else {
+                $data['order_list'] = 'desc'; 
+            }  
+        }else {
+            $data['order_list'] = 'desc';
+        }
+        if($request->has('sort')){
+            $by = $request->sort;
+        }else {
+            $by = 'id';
+        }
+
+        $data['registry'] = $this->filter($query,$request)->orderBy($by,$data['order_list'])->paginate(15);
         $data['search'] = $request->has('search') ? $request->get('search') : null;
         $data['search'] = $request->has('search') ? $request->get('search') : null;
-        $data['period'] = Period::all();
+        $data['period'] = Period::orderBy('detail')->get();
         return view('home',$data);
     }
 
@@ -55,11 +58,28 @@ class HomeController extends Controller
                 ->orWhere('docente_tutor','like','%'.$search.'%');
             });
         }
+        if($request->has('final') && $request->get('final') != ''  ){
+            $final = $request->get('final');
+            if($request->get('final') == 'S'){
+                $query = $query->where(function ($q) use ( $final ) {
+                    $q->where('fecha_fin',null)
+                    ->orWhere('fecha_fin','');
+                });
+            }else{
+                $query = $query->where('fecha_fin','<>',null)->where('fecha_fin','<>','');
+                if($request->get('final') == 'N'){
+                    $query = $query->where('convalidacion',0);
+                }else{
+                    $query = $query->where('convalidacion',1);
+                }
+            }
+        }
+
         return $query;
     }
 
     public function export(Request $request){
-        return Excel::download( new RegistryExport($request), 'reporte.xlsx');
+        return Excel::download( new RegistryExport($request), 'Reporte '.date('Y-m-d').'.xlsx');
     }
 
     public function create (){
@@ -74,22 +94,25 @@ class HomeController extends Controller
             'nombre_estudiante' => 'required',
             'nombre_institucion' => 'required',
             'ci_estudiante' => 'required|digits:10',
-            'numero_horas' => 'required|integer|min:1|not_in:0',
+            'numero_horas' => 'integer|min:0|max:99',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'after_or_equal:fecha_inicio',
         ],[
             'codigo_ies.required' => 'El campo es requerido',
             'ci_estudiante.required' => 'El campo es requerido',
-            'numero_horas.required' => 'El campo es requerido',
             'fecha_inicio.required' => 'El campo es requerido',
             'nombre_estudiante.required' => 'El campo es requerido',
             'nombre_institucion.required' => 'El campo es requerido',
-            'numero_horas.min' => 'Ingrese solo números mayor a cero',
-            'numero_horas.not_in' => 'Ingrese solo números mayor a cero',
+            'numero_horas.min' => 'Ingrese solo números mayor a cero',            
+            'numero_horas.max' => 'Ingrese solo números menores a 99',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->messages(), 422);
+        }
+        if($request->has('convalidacion')){
+            $request->numero_horas = 0; 
+            $request->docente_tutor = 'Ing. William Chumi'; 
         }
         $save = Registry::create($request->all());
         if(!$save){
@@ -112,18 +135,17 @@ class HomeController extends Controller
             'nombre_estudiante' => 'required',
             'nombre_institucion' => 'required',
             'ci_estudiante' => 'required|digits:10',
-            'numero_horas' => 'required|integer|min:1|not_in:0',
+            'numero_horas' => 'integer|min:0|max:99',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'after_or_equal:fecha_inicio',
         ],[
             'codigo_ies.required' => 'El campo es requerido',
             'ci_estudiante.required' => 'El campo es requerido',
-            'numero_horas.required' => 'El campo es requerido',
             'fecha_inicio.required' => 'El campo es requerido',
             'nombre_estudiante.required' => 'El campo es requerido',
             'nombre_institucion.required' => 'El campo es requerido',
             'numero_horas.min' => 'Ingrese solo números mayor a cero',
-            'numero_horas.not_in' => 'Ingrese solo números mayor a cero',
+            'numero_horas.max' => 'Ingrese solo números menores a 99',
         ]);
 
         if ($validator->fails()) {
@@ -131,7 +153,11 @@ class HomeController extends Controller
         }
         if(!$request->has('convalidacion')){
             $request->request->add(['convalidacion' => 0]); 
+        }else{
+            $request->numero_horas = 0; 
+            $request->docente_tutor = 'Ing. William Chumi'; 
         }
+
         if(!$request->has('fecha_fin')){
             $request->request->add(['fecha_fin' => null]); 
         }
@@ -143,8 +169,8 @@ class HomeController extends Controller
         return response($this->format->update_ok(null), 200);
     }
 
-    public function delete ($id) {
-        $delete = Registry::find($id)->delete();
+    public function delete (Request $request) {
+        $delete = Registry::find($request->id)->delete();
         if(!$delete){
             toastr()->error('Registro no pudo ser Eliminado!');
         }
