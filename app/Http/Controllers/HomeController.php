@@ -242,7 +242,7 @@ class HomeController extends Controller {
         $estudiante = Registry::find($request->id);
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
-        $section->addImage(storage_path('app/public/logo.jpeg'),array('width' => 90, 'height' => 50, 'align' => 'left'));
+        $section->addImage(storage_path('app/public/logo.jpeg'),array('width' => 100, 'height' => 60, 'align' => 'left'));
         date_default_timezone_set("America/Guayaquil");
         setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
         $fecha = strftime("DM Quito, %d de %B del %Y");
@@ -269,8 +269,8 @@ class HomeController extends Controller {
         $section->addText(htmlspecialchars('CARRERA DE SISTEMAS DE INFORMACIÓN'),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
 
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save(storage_path($estudiante->nombre_estudiante.'.docx'));
-        return response()->download(storage_path($estudiante->nombre_estudiante.'.docx'));
+        $objWriter->save(storage_path('app/public/Carta Presentación.docx'));
+        return response()->download(storage_path('app/public/Carta Presentación.docx'));
     }
 
 }

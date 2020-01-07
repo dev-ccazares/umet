@@ -192,6 +192,14 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group row">
+                                <label class="control-label col-sm-3 my-auto text-right"><span class="text-danger">*</span>&nbsp;Cargo:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="cargo" placeholder="Cargo" value="" required >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group row">
                                 <label class="control-label col-sm-3 my-auto text-right"><span class="text-danger">*&nbsp;</span>Nivel:</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control" name="nivel" placeholder="Nivel" value="" required >
