@@ -59,7 +59,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Nombre Estudiante:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="nombre_estudiante" placeholder="Nombre Estudiante" value="{{ isset($tmp) ? $tmp->nombre_estudiante : ''}}" required>
+                    <input type="text" class="form-control" name="nombre_estudiante" placeholder="Nombre Estudiante"  style="text-transform: uppercase;" value="{{ isset($tmp) ? $tmp->nombre_estudiante : ''}}" required>
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Nombre Institución:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="nombre_institucion" placeholder="Nombre Institución" value="{{ isset($tmp) ? $tmp->nombre_institucion : ''}}" required>
+                    <input type="text" class="form-control" name="nombre_institucion" placeholder="Nombre Institución"  style="text-transform: uppercase;" value="{{ isset($tmp) ? $tmp->nombre_institucion : ''}}" required>
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" >Número Horas:</label>
                 <div class="col-sm-7">
-                    <input type="number" min="0" max='99' class="form-control" id="numero_horas" name="numero_horas" placeholder="Número Horas" value="{{ isset($tmp) ? $tmp->numero_horas : ''}}" required>
+                    <input type="number" min="0" max='1000' class="form-control" id="numero_horas" name="numero_horas" placeholder="Número Horas" value="{{ isset($tmp) ? $tmp->numero_horas : ''}}" required>
                 </div>
             </div>
         </div>
@@ -119,7 +119,7 @@
             <div class="form-group row">
                 <label class="control-label col-sm-3 my-auto text-right" >Docente Tutor:</label>
                 <div class="col-sm-7">
-                    <input type="text" class="form-control" name="docente_tutor" id="docente_tutor" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" >
+                    <input type="text" class="form-control" name="docente_tutor" id="docente_tutor" style="text-transform: uppercase;" placeholder="Docente Tutor" value="{{ isset($tmp) ? $tmp->docente_tutor : ''}}" >
                 </div>
             </div>
         </div>

@@ -73,7 +73,7 @@
                                         <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'campo_especifico', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Campo Específico</th>
                                         <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'docente_tutor', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Docente Tutor</th>
                                         <th class="text-center cabeceraTabla" data-id="{{ \Request::fullUrlWithQuery(['sort' => 'updated_at', 'order' => $order_list])}}" style="vertical-align: middle;" scope="col">Fecha de Modificación</th>
-                                        <th scope="col" width="80px">Acciones</th>
+                                        <th scope="col" width="120px" class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,6 +104,7 @@
                                                 <td>{{explode(' ',$item->updated_at)[0]}}</td>
                                                 <td class="text-center">
                                                     <a class="btn btn-principal btn-sm text-white btnModal" title="Editar"  data-url="{{ route('editRegistry',['id' => $item->id])}}"><i class="mdi mdi-pencil"></i></a> 
+                                                    <button type="button" class="btn btn-secondary text-white btn-sm wordId" title="Carta Presentación" data-id="{{$item->id}}" data-toggle="modal" data-target="#modalWord" ><i class="mdi mdi-file-document"></i></button>
                                                     <a class="btn btn-danger btn-sm text-white eliminarRegistro" title="Eliminar"  data-url="{{ route('deleteRegistry',['id' => $item->id])}}"><i class="mdi mdi-delete"></i></a> 
                                                 </td>
                                             </tr>
@@ -139,7 +140,6 @@
                 </br><span style="font-size: 20px;">Guardando ...<span>
             </div>
             <form id="formPeriodo" class="loader row">
-                @csrf
                 <div class="col-12" >
                     <div class="form-group row">
                         <label class="control-label col-sm-3 my-auto text-right" ><span class="text-danger">*&nbsp;</span>Nombre:</label>
@@ -159,6 +159,56 @@
       </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalWord" tabindex="-1" role="dialog" aria-labelledby="wordLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="wordoLabel">Descargar Carta de Presentación</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="formWord" action = "{{route('wordRegistry')}}" method="get">
+            <div class="modal-body row">
+                <div class="col-12" >
+                    <input name="id" id="idRegistro" value="" hidden >
+                    <div class="form-group row">
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3 my-auto text-right"><span class="text-danger">*&nbsp;</span>Titulo:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="titulo" placeholder="Titulo" value="" required >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3 my-auto text-right"><span class="text-danger">*</span>&nbsp;Nombre:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="nombre" placeholder="Nombre" value="" required >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group row">
+                                <label class="control-label col-sm-3 my-auto text-right"><span class="text-danger">*&nbsp;</span>Nivel:</label>
+                                <div class="col-sm-7">
+                                    <input type="text" class="form-control" name="nivel" placeholder="Nivel" value="" required >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="mdi mdi-cancel"></i>&nbsp;Cancelar</button>
+                <button type="submit" class="btn btn-success"><i class='mdi mdi-file-download'></i>&nbsp; Descargar</button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
 @endsection
 @section('js')
 <script>
@@ -174,6 +224,12 @@
             url = $(this).data("url");
             $("#detail").val('');
             $("#idPeriodo").val('');
+        });
+
+        $('.wordId').click(function() {
+            $('#formWord')[0].reset();
+            id = $(this).data("id");
+            $("#idRegistro").attr('value',id);
         });
 
         $('#eliminar').click(function() {

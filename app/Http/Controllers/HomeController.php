@@ -94,7 +94,7 @@ class HomeController extends Controller {
             'nombre_estudiante' => 'required',
             'nombre_institucion' => 'required',
             'ci_estudiante' => 'required|digits:10',
-            'numero_horas' => 'integer|min:0|max:99',
+            'numero_horas' => 'integer|min:0|max:1000',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'after_or_equal:fecha_inicio',
         ],[
@@ -104,7 +104,7 @@ class HomeController extends Controller {
             'nombre_estudiante.required' => 'El campo es requerido',
             'nombre_institucion.required' => 'El campo es requerido',
             'numero_horas.min' => 'Ingrese solo números mayor a cero',            
-            'numero_horas.max' => 'Ingrese solo números menores a 99',
+            'numero_horas.max' => 'Ingrese solo números menores a 1000',
         ]);
 
         if ($validator->fails()) {
@@ -114,7 +114,11 @@ class HomeController extends Controller {
             $request->numero_horas = 0; 
             $request->docente_tutor = 'Ing. William Chumi'; 
         }
-        $save = Registry::create($request->all());
+        $data = $request->all();
+        $data['docente_tutor'] = mb_convert_case($request->docente_tutor, MB_CASE_UPPER, "UTF-8");
+        $data['nombre_institucion'] = mb_convert_case($request->nombre_institucion, MB_CASE_UPPER, "UTF-8");
+        $data['nombre_estudiante'] = mb_convert_case($request->nombre_estudiante, MB_CASE_UPPER, "UTF-8");
+        $save = Registry::create($data);
         if(!$save){
             return response($this->format->insert_err(), 409);
         }
@@ -135,7 +139,7 @@ class HomeController extends Controller {
             'nombre_estudiante' => 'required',
             'nombre_institucion' => 'required',
             'ci_estudiante' => 'required|digits:10',
-            'numero_horas' => 'integer|min:0|max:99',
+            'numero_horas' => 'integer|min:0|max:1000',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'after_or_equal:fecha_inicio',
         ],[
@@ -145,7 +149,7 @@ class HomeController extends Controller {
             'nombre_estudiante.required' => 'El campo es requerido',
             'nombre_institucion.required' => 'El campo es requerido',
             'numero_horas.min' => 'Ingrese solo números mayor a cero',
-            'numero_horas.max' => 'Ingrese solo números menores a 99',
+            'numero_horas.max' => 'Ingrese solo números menores a 1000',
         ]);
 
         if ($validator->fails()) {
@@ -158,10 +162,18 @@ class HomeController extends Controller {
             $request->docente_tutor = 'Ing. William Chumi'; 
         }
 
+        if(!$request->has('papeleo')){
+            $request->request->add(['papeleo' => 0]); 
+        }
+        
         if(!$request->has('fecha_fin')){
             $request->request->add(['fecha_fin' => null]); 
         }
-        $update = Registry::find($id)->update($request->all());
+        $data = $request->all();
+        $data['docente_tutor'] = mb_convert_case($request->docente_tutor, MB_CASE_UPPER, "UTF-8");
+        $data['nombre_institucion'] = mb_convert_case($request->nombre_institucion, MB_CASE_UPPER, "UTF-8");
+        $data['nombre_estudiante'] = mb_convert_case($request->nombre_estudiante, MB_CASE_UPPER, "UTF-8");
+        $update = Registry::find($id)->update($data);
         if(!$update){
             return response($this->format->update_err(), 409);
         }
@@ -223,6 +235,42 @@ class HomeController extends Controller {
         }
         toastr()->success('Periodo Eliminado!');
         return redirect()->route('home');
+    }
+
+    public function word(Request $request){
+
+        $estudiante = Registry::find($request->id);
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+        $section = $phpWord->addSection();
+        $section->addImage(storage_path('app/public/logo.jpeg'),array('width' => 90, 'height' => 50, 'align' => 'left'));
+        date_default_timezone_set("America/Guayaquil");
+        setlocale(LC_ALL,"es_ES@euro","es_ES","esp");
+        $fecha = strftime("DM Quito, %d de %B del %Y");
+        $section->addText(htmlspecialchars($fecha),[],array('alignment' => 'right'));
+        $section->addText(htmlspecialchars(mb_convert_case($request->titulo, MB_CASE_UPPER, "UTF-8")),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addText(htmlspecialchars(mb_convert_case($request->nombre, MB_CASE_UPPER, "UTF-8")),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addText(htmlspecialchars(mb_convert_case($request->cargo, MB_CASE_UPPER, "UTF-8")),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addText(htmlspecialchars(mb_convert_case($estudiante->nombre_institucion, MB_CASE_UPPER, "UTF-8")),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addTextBreak(1);
+        $section->addText(htmlspecialchars('Presente.-'),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addTextBreak(1);
+        $section->addText(htmlspecialchars('El motivo de la presente es para solicitar a usted muy comedidamente la realización de prácticas 
+                                            pre profesional en la empresa '.mb_convert_case($estudiante->nombre_institucion, MB_CASE_UPPER, "UTF-8").' , al/la Sr/ta. '.mb_convert_case($estudiante->nombre_estudiante, MB_CASE_UPPER, "UTF-8").' con 
+                                            cédula de identidad: '.$estudiante->ci_estudiante.' , estudiante de '.mb_convert_case($request->nivel, MB_CASE_TITLE, "UTF-8").' Semestre de la Carrera de 
+                                            Sistemas de Información en la Universidad Metropolitana del Ecuador (UMFT).'),[],array('align' => 'both'));
+        
+        $section->addText(htmlspecialchars('Cabe mencionar que dichas practicas son un requisito para la graduadón del estudiante y debe tener una duración mínima de 400 horas, en el horario que usted tenga a convenir con el estudiante.'),[],array('both' => 'Justify'));
+        $section->addText(htmlspecialchars('A la espera de una respuesta favorable me despido, deseándole éxitos en sus labores diarias.'),[],array('both' => 'Justify'));
+        $section->addTextBreak(1);
+        $section->addText(htmlspecialchars('Atentamente.'),[],array('both' => 'Justify'));
+        $section->addTextBreak(10);
+        $section->addText(htmlspecialchars('Ing. William Chumi Sarmiento, Msc'),[],array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addText(htmlspecialchars('COORDINADOR DE PRÁCTICAS PRE PROFESIONALES'),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+        $section->addText(htmlspecialchars('CARRERA DE SISTEMAS DE INFORMACIÓN'),array('bold' => true),array("spaceBefore" => 0, "spaceAfter" => 0, "spacing" => 0));
+
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save(storage_path($estudiante->nombre_estudiante.'.docx'));
+        return response()->download(storage_path($estudiante->nombre_estudiante.'.docx'));
     }
 
 }

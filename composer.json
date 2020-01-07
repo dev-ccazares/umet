@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.0",
         "laraveles/spanish": "^1.4",
         "maatwebsite/excel": "^3.1",
+        "phpoffice/phpword": "^0.17.0",
         "snapappointments/bootstrap-select": "^1.13",
         "yoeunes/toastr": "^1.2"
     },
